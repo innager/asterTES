@@ -4,7 +4,7 @@
 # Aster: Adaptive Statistical framework for Therapeutic Efficacy and Recrudescence
 
 Package `asterTES` performs recurrence classification and failure rate
-estimation of therapeutic efficacy studies (TES). To install it from
+estimation for therapeutic efficacy studies (TES). To install it from
 [GitHub](https://github.com/):
 
 ``` r
@@ -14,9 +14,11 @@ remotes::install_github("EPPIcenter/asterTES")
 
 ## Data
 
-Consider TES data that are stored in three data frames: `dfppl` (where
-rows represent individuals), `dfsmp` (rows represent genotyped samples),
-and `dfgen` (genotyping data, rows represent alleles).
+As an example, we use a simulated study that could be conducted in a
+high transmission setting. Consider TES data that are stored in three
+data frames: `dfppl` (where rows represent individuals), `dfsmp` (rows
+represent genotyped samples), and `dfgen` (genotyping data, rows
+represent alleles).
 
 ``` r
 library(asterTES)
@@ -26,11 +28,11 @@ head(dfppl, 3)
 #> 2 A2      NA       0
 #> 3 A3      28       1
 head(dfsmp, 4)
-#>   id smp_id day parasite_dens
-#> 1 A1  A1-D0   0  5.190163e+04
-#> 2 A2  A2-D0   0  2.024178e+04
-#> 3 A3  A3-D0   0  1.501553e+05
-#> 4 A3 A3-D28  28  4.521802e+00
+#>   id smp_id day parasite_dens pdet
+#> 1 A1  A1-D0   0  5.190163e+04 0.95
+#> 2 A2  A2-D0   0  2.024178e+04 0.95
+#> 3 A3  A3-D0   0  1.501553e+05 0.95
+#> 4 A3 A3-D28  28  4.521802e+00 0.50
 head(dfgen, 3)
 #>   smp_id locus allele
 #> 1  A1-D0  loc1     t3
@@ -90,7 +92,8 @@ dfsmp$pdet <- pd2pdet(dfsmp$parasite_dens, pdbreaks, pmiss)
 To obtain individual recurrence classification and conditional
 probabilities of genotyping data given recrudescence, a pair of samples
 for the same individual is needed - the Day 0 sample and the recurrent
-sample. As an example, we classify recurrence from ID `A3`:
+sample. For example, to classify a recurrent infection from an
+individual with ID `"A3"`:
 
 ``` r
 iid <- which(dfsmp$id == "A3")

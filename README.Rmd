@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Aster: Adaptive Statistical framework for Therapeutic Efficacy and Recrudescence
 
-Package `asterTES` performs recurrence classification and failure rate estimation of therapeutic efficacy studies (TES). To install it from [GitHub](https://github.com/):
+Package `asterTES` performs recurrence classification and failure rate estimation for therapeutic efficacy studies (TES). To install it from [GitHub](https://github.com/):
 
 ``` r
 # install.packages("remotes")
@@ -25,7 +25,7 @@ remotes::install_github("EPPIcenter/asterTES")
 
 ## Data
 
-Consider TES data that are stored in three data frames: `dfppl` (where rows represent individuals), `dfsmp` (rows represent genotyped samples), and `dfgen` (genotyping data, rows represent alleles).
+As an example, we use a simulated study that could be conducted in a high transmission setting. Consider TES data that are stored in three data frames: `dfppl` (where rows represent individuals), `dfsmp` (rows represent genotyped samples), and `dfgen` (genotyping data, rows represent alleles). 
 
 ```{r setup, warning = FALSE}
 library(asterTES)
@@ -77,7 +77,7 @@ dfsmp$pdet <- pd2pdet(dfsmp$parasite_dens, pdbreaks, pmiss)
 
 ## Process
 
-To obtain individual recurrence classification and conditional probabilities of genotyping data given recrudescence, a pair of samples for the same individual is needed - the Day 0 sample and the recurrent sample. As an example, we classify recurrence from ID `A3`:
+To obtain individual recurrence classification and conditional probabilities of genotyping data given recrudescence, a pair of samples for the same individual is needed - the Day 0 sample and the recurrent sample. For example, to classify a recurrent infection from an individual with ID `"A3"`:
 
 ```{r}
 iid <- which(dfsmp$id == "A3")
