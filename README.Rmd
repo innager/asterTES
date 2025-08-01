@@ -1,0 +1,98 @@
+---
+output: github_document
+csl: "`r here::here('vignettes', 'vancouver-brackets.csl')`"
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  knitr::opts_chunk$set(dpi=300, fig.width=7)
+)
+```
+
+# Aster: Adaptive Statistical framework for Therapeutic Efficacy and Recrudescence
+
+Package `asterTES` performs recurrence classification and failure rate estimation of therapeutic efficacy studies (TES). To install it from [GitHub](https://github.com/):
+
+``` r
+# install.packages("remotes")
+remotes::install_github("EPPIcenter/asterTES")
+```
+
+## Data
+
+Consider TES data that are stored in three data frames: `dfppl` (where rows represent individuals), `dfsmp` (rows represent genotyped samples), and `dfgen` (genotyping data, rows represent alleles).
+
+```{r setup, warning = FALSE}
+library(asterTES)
+head(dfppl, 3)
+head(dfsmp, 4)
+head(dfgen, 3)
+```
+
+## Prep
+
+To analyze these data, we first need to estimate COI, population allele frequencies, and a level of relatedness between separate infections in the population (background relatedness). Various methods can be used; to illustrate, we use a package `dcifer`:
+
+```{r}
+# install.packages("dcifer")
+# Stay tuned for upcoming dcifer updates! Changes may affect the code below
+library(dcifer)
+```
+
+For estimation of allele frequencies and background relatedness, we use Day 0 samples only:
+
+```{r}
+dsmp <- formatDat(dfgen, svar = "smp_id", lvar = "locus", avar = "allele")
+dsmp <- dsmp[dfsmp$smp_id]                     # same order as dfsmp
+coi  <- getCOI(dsmp, lrank = 2)
+
+# D0 only to calculate afreq and rbg
+ismp0 <- dfsmp$day == 0
+afreq <- calcAfreq(dsmp[ismp0], coi[ismp0], tol = 1e-5)
+minfr <- 1/sum(coi)
+afreq <- lapply(afreq, function(af, minfr) {af[af == 0] <- minfr; af/sum(af)},
+                minfr = minfr)                 # fill in 0-frequencies
+
+rhat <- ibdDat(dsmp[ismp0], coi[ismp0], afreq, pval = FALSE)
+rbg  <- mean(rhat, na.rm = TRUE)
+```
+
+Next, we estimate detection probabilities. As an example, we use a simple scheme where a probability of detecting a strain at a locus depends on a discretized sample parasite density:
+
+```{r}
+pdbreaks <- c(0, 10, 1000, 10000, Inf)
+pmiss    <- c(0.5, 0.2, 0.1, 0.05)
+pd2pdet <- function(x, breaks, labs) {
+  y <- cut(x, breaks, labels = labs, include.lowest = FALSE)
+  return(1 - as.numeric(as.character(y)))
+}
+
+dfsmp$pdet <- pd2pdet(dfsmp$parasite_dens, pdbreaks, pmiss)
+```
+
+## Process
+
+To obtain individual recurrence classification and conditional probabilities of genotyping data given recrudescence, a pair of samples for the same individual is needed - the Day 0 sample and the recurrent sample. As an example, we classify recurrence from ID `A3`:
+
+```{r}
+iid <- which(dfsmp$id == "A3")
+i0 <- iid[1]; ir <- iid[2]
+(res1 <- A0A1(dsmp[[i0]], dsmp[[ir]], coi[i0], coi[ir], afreq, dfsmp$pdet[i0],
+              dfsmp$pdet[ir], rbg))
+```
+
+We can also process the whole dataset and estimate the therapeutic failure rate along with classification for each pair and corresponding posterior probability of recrudescence. Two such probabilities are provided for each recurrence: one with a user-specified prior probability and another using an empirical Bayes approach. Classification can be updated based on the latter (using a 0.5 cut-off). The failure rate is calculated using the Kaplan-Meier survival estimator:
+
+```{r}
+res <- asterKM(dsmp, dfppl, dfsmp, coi, afreq, rbg, pprior = 0.5, 
+               update_est = TRUE)
+res$failure_rate
+head(res$classification)
+```
+
+The package also provides functions to calculate various probabilities and functions used in the likelihood (for more details, refer to the documentation).

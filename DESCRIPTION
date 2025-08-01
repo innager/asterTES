@@ -1,0 +1,24 @@
+Package: asterTES
+Type: Package
+Title: Recurrence classification and failure rate estimation of TES
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Inna", "Gerlovina",
+      email = "inna.gerlovina@ucsf.edu",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-7772-7473")
+    )
+  )
+Maintainer: Inna Gerlovina <innager@berkeley.edu>
+Description: Performs statistical analysis of genotyping data from antimalarial therapeutic efficacy studies (TES). The package includes classification of recurrent infections, corresponding inference, and estimation of a failure rate. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Depends: 
+    R (>= 4.5.0)
