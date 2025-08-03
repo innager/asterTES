@@ -57,7 +57,6 @@ afreq <- calcAfreq(dsmp[ismp0], coi[ismp0], tol = 1e-5)
 minfr <- 1/sum(coi)
 afreq <- lapply(afreq, function(af, minfr) {af[af == 0] <- minfr; af/sum(af)},
                 minfr = minfr)                 # fill in 0-frequencies
-
 rhat <- ibdDat(dsmp[ismp0], coi[ismp0], afreq, pval = FALSE)
 rbg  <- mean(rhat, na.rm = TRUE)
 ```

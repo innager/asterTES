@@ -28,11 +28,11 @@ head(dfppl, 3)
 #> 2 A2      NA       0
 #> 3 A3      28       1
 head(dfsmp, 4)
-#>   id smp_id day parasite_dens pdet
-#> 1 A1  A1-D0   0  5.190163e+04 0.95
-#> 2 A2  A2-D0   0  2.024178e+04 0.95
-#> 3 A3  A3-D0   0  1.501553e+05 0.95
-#> 4 A3 A3-D28  28  4.521802e+00 0.50
+#>   id smp_id day parasite_dens
+#> 1 A1  A1-D0   0  5.190163e+04
+#> 2 A2  A2-D0   0  2.024178e+04
+#> 3 A3  A3-D0   0  1.501553e+05
+#> 4 A3 A3-D28  28  4.521802e+00
 head(dfgen, 3)
 #>   smp_id locus allele
 #> 1  A1-D0  loc1     t3
@@ -67,7 +67,6 @@ afreq <- calcAfreq(dsmp[ismp0], coi[ismp0], tol = 1e-5)
 minfr <- 1/sum(coi)
 afreq <- lapply(afreq, function(af, minfr) {af[af == 0] <- minfr; af/sum(af)},
                 minfr = minfr)                 # fill in 0-frequencies
-
 rhat <- ibdDat(dsmp[ismp0], coi[ismp0], afreq, pval = FALSE)
 rbg  <- mean(rhat, na.rm = TRUE)
 ```
