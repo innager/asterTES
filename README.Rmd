@@ -61,7 +61,7 @@ rhat <- ibdDat(dsmp[ismp0], coi[ismp0], afreq, pval = FALSE)
 rbg  <- mean(rhat, na.rm = TRUE)
 ```
 
-Next, we estimate detection probabilities. As an example, we use a simple scheme where a probability of detecting a strain at a locus depends on a discretized sample parasite density:
+Next, we estimate detection probabilities. Here, we use a simple example where the probability of detecting a strain at a locus depends on discretized parasite density:
 
 ```{r}
 pdbreaks <- c(0, 10, 1000, 10000, Inf)
