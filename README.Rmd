@@ -33,6 +33,7 @@ head(dfppl, 3)
 head(dfsmp, 4)
 head(dfgen, 3)
 ```
+The outcome in `dfppl` is coded as 0 for successful treatment, 1 for recurrence, and 2 for loss to follow-up (censoring). 
 
 ## Prep
 

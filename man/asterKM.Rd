@@ -18,13 +18,23 @@ asterKM(
 )
 }
 \arguments{
-\item{dsmp}{a named list with genetic data for all the genotyped samples. Each element represents a sample and is itself a list with elements corresponding to loci.}
+\item{dsmp}{a named list with genetic data for all the genotyped samples.
+Each element represents a sample and is itself a list with elements
+corresponding to loci.}
 
-\item{dfppl}{a data frame with rows corresponding to individuals in the study. The variables should include personal \code{id}, \code{lastday} (last day in the study), and \code{outcome}, coded as \code{0} for successful treatment (ACPR), \code{1} for recurrence, and \code{2} for loss to follow-up (censoring).}
+\item{dfppl}{a data frame with rows corresponding to individuals in the
+study. The variables should include personal \code{id}, \code{lastday}
+(last day in the study), and \code{outcome}, coded as \code{0} for
+successful treatment (ACPR), \code{1} for recurrence, and \code{2} for loss
+to follow-up (censoring).}
 
-\item{dfsmp}{a data frame with rows corresponding to genotyped samples. The variables should include personal \code{id}, \code{smp_id}, \code{day} (day of the study the sample was obtained), and \code{pdet} (detection probability).}
+\item{dfsmp}{a data frame with rows corresponding to genotyped samples. The
+variables should include personal \code{id}, \code{smp_id}, \code{day} (day
+of the study the sample was obtained), and \code{pdet} (detection
+probability).}
 
-\item{coi}{a vector of COI for each sample (the length and order should correspond to the samples in \code{dfsmp}).}
+\item{coi}{a vector of COI for each sample (the length and order should
+correspond to the samples in \code{dfsmp}).}
 
 \item{afreq}{a list of population allele frequencies. Each element of the
 list corresponds to a locus.}
@@ -34,7 +44,8 @@ population.}
 
 \item{pprior}{prior probability of recrudescence.}
 
-\item{update_est}{a logical value indicating if the failure rate estimate should be updated once posterior probabilities are calculated.}
+\item{update_est}{a logical value indicating if the failure rate estimate
+should be updated once posterior probabilities are calculated.}
 
 \item{pfalse}{adjustment for possible false positive alleles allowing for
 missingness when the number of unique alleles at a locus is greater than or

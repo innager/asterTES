@@ -40,6 +40,9 @@ head(dfgen, 3)
 #> 3  A1-D0  loc1     t7
 ```
 
+The outcome in `dfppl` is coded as 0 for successful treatment, 1 for
+recurrence, and 2 for loss to follow-up (censoring).
+
 ## Prep
 
 To analyze these data, we first need to estimate COI, population allele
@@ -121,7 +124,7 @@ res <- asterKM(dsmp, dfppl, dfsmp, coi, afreq, rbg, pprior = 0.5,
 res$failure_rate
 #> [1] 0.1447888
 head(res$classification)
-#>   id lastday outcome recrud        A0        A1 ppost_user ppost_empB
+#>   id lastday outcome recrud     logA0     logA1 ppost_user ppost_empB
 #> 1 A1      NA       0     NA        NA        NA         NA         NA
 #> 2 A2      NA       0     NA        NA        NA         NA         NA
 #> 3 A3      28       1   TRUE -132.3660 -127.1060  0.9948313  0.9768664
